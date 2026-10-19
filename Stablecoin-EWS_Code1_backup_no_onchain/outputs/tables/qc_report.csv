@@ -1,0 +1,22 @@
+﻿check,status,detail
+"khóa (stablecoin, timestamp) duy nhất",PASS,
+timestamp có múi giờ UTC,PASS,UTC
+timestamp đúng 00:00 UTC,PASS,
+không có ngày chưa đóng nến (>= hôm nay UTC),PASS,max=2026-10-16 00:00:00+00:00
+dữ liệu gốc mọi nguồn đều gắn mốc 00:00 UTC (off_midnight = 0),PASS,
+lưới ngày liên tục trong từng coin (cần cho shift(-h) của nhãn),PASS,
+panel không chứa cột on-chain (bản backup),PASS,
+giá dương và <= 5 USD (ngoài khoảng = lỗi dữ liệu),PASS,0 quan sát
+"giá ngoài [0.5, 1.5] (thường là depeg thật, cần xem tay và ghi vào bảng sự kiện)",WARN,2 quan sát: UST 2022-05-12 0.3626 (binance_usd); UST 2022-05-13 0.2453 (binance_usd)
+high >= low,PASS,
+peg_deviation >= 0,PASS,
+peg_deviation_min <= peg_deviation,PASS,
+"biến cấp thị trường (BTC/ETH, TVL, USDT-USD) giống hệt nhau giữa các coin trong cùng ngày",PASS,"0 ngày khác giá trị, 0 ngày NaN lẫn không NaN"
+supply không âm,PASS,
+"giá đóng cửa lệch > 0,5% so với nguồn độc lập (CryptoCompare/Binance quy USD)",INFO,"52/4958 ngày có >= 2 nguồn; theo coin: {'BUSD': 5, 'DAI': 8, 'USDC': 39}; xem review_src_disagree_days.csv"
+"tỷ lệ ngày có ít nhất 2 nguồn giá độc lập, theo coin",WARN,"{'BUSD': '58%', 'DAI': '1%', 'FDUSD': '100%', 'USDC': '93%', 'USDT': '0%', 'UST': '0%'}"
+"số ngày râu nến nghi lỗi (hl_suspect), đã làm sạch trong peg_deviation_hl_clean",INFO,"{'BUSD': 1, 'DAI': 2, 'FDUSD': 1, 'USDC': 2}"
+không nghi dữ liệu cũ/đứng giá (giá giống nhau >= 20 ngày hoặc volume=0 > 20%),PASS,
+cơ cấu nguồn giá (price_src),INFO,"{'yahoo': 11100, 'binance_usd': 144}"
+dữ liệu on-chain,INFO,"KHÔNG dùng (bản backup): thay bằng proxy DefiLlama (supply_change, supply_eth_change, supply_eth_share, tvl_change) và chênh lệch liên thị trường xmkt_gap"
+quy ước nến Yahoo khớp nguồn độc lập (lag tối ưu = 0 ngày),PASS,tất cả lag 0 (3 cặp so sánh)
