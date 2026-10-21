@@ -1,0 +1,7 @@
+split,horizon_days,eligible_samples,positive_samples,negative_samples
+train,1,1751,88,1663
+train,3,1745,191,1554
+validation,1,1088,4,1084
+validation,3,1082,12,1070
+test,1,4140,5,4135
+test,3,4134,15,4119

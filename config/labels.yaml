@@ -1,0 +1,70 @@
+panel_path: "Stablecoin-EWS_Code1_backup_no_onchain/data/processed/panel.parquet"
+labels_output: "data/interim/labels.parquet"
+tables_output: "outputs/tables"
+
+core_coins:
+  - USDT
+  - USDC
+  - DAI
+
+splits:
+  train:
+    start: "2020-01-01"
+    end: "2021-12-31"
+  validation:
+    start: "2022-01-01"
+    end: "2022-12-31"
+  test:
+    start: "2023-01-01"
+    end: "2026-10-16"
+
+primary:
+  src: hl
+  tau: 0.01
+  m: 1
+
+sources:
+  hl: "peg_deviation_hl_clean"
+  cl: "peg_deviation_min"
+  y: "peg_deviation"
+
+thresholds:
+  - 0.005
+  - 0.01
+  - 0.02
+
+confirmation_days:
+  - 1
+  - 2
+
+horizons:
+  - 1
+  - 3
+feature_columns:
+  - peg_deviation
+  - volume
+  - turnover
+  - range_hl
+  - xmkt_gap
+  - supply_change
+  - supply_eth_change
+  - supply_eth_share
+  - tvl_change
+  - btc_ret
+  - btc_vol
+  - eth_ret
+  - eth_vol
+  - usdt_usd
+  - price_return_1d
+  - price_change_1d
+  - peg_deviation_change_1d
+  - volume_pct_change_1d
+  - turnover_pct_change_1d
+  - supply_change_change_1d
+  - supply_eth_change_change_1d
+  - tvl_change_change_1d
+  - price_return_mean_7d
+  - price_return_vol_7d
+  - price_return_mean_30d
+  - price_return_vol_30d
+  - xmkt_gap_missing

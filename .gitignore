@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+data/interim/
+/Stablecoin-EWS_Code1_backup_no_onchain/
