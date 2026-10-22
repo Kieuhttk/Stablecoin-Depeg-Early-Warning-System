@@ -1,0 +1,23 @@
+h,model,params,cv_pr_auc,n_obs,n_pos
+1,baseline,{},0.09369586291401724,2150,24
+1,logit,"{""C"": 0.05}",0.04780325505623319,2150,24
+1,logit,"{""C"": 0.5}",0.057720319815234136,2150,24
+1,rf,"{""max_depth"": 3, ""min_samples_leaf"": 20, ""n_estimators"": 500}",0.07942506298418803,2150,24
+1,rf,"{""max_depth"": 3, ""min_samples_leaf"": 50, ""n_estimators"": 500}",0.08680118348104975,2150,24
+1,rf,"{""max_depth"": 5, ""min_samples_leaf"": 20, ""n_estimators"": 500}",0.08560136730188074,2150,24
+1,rf,"{""max_depth"": 5, ""min_samples_leaf"": 50, ""n_estimators"": 500}",0.1015870824219871,2150,24
+1,xgboost,"{""learning_rate"": 0.05, ""max_depth"": 2, ""min_leaf"": 20, ""n_estimators"": 200}",0.08564805355608593,2150,24
+1,xgboost,"{""learning_rate"": 0.05, ""max_depth"": 2, ""min_leaf"": 20, ""n_estimators"": 400}",0.08844558685909482,2150,24
+1,xgboost,"{""learning_rate"": 0.05, ""max_depth"": 3, ""min_leaf"": 20, ""n_estimators"": 200}",0.07903628668059859,2150,24
+1,xgboost,"{""learning_rate"": 0.05, ""max_depth"": 3, ""min_leaf"": 20, ""n_estimators"": 400}",0.08413738784764156,2150,24
+3,baseline,{},0.17217430956906332,2138,66
+3,logit,"{""C"": 0.05}",0.09580917498855851,2138,66
+3,logit,"{""C"": 0.5}",0.11611300857570891,2138,66
+3,rf,"{""max_depth"": 3, ""min_samples_leaf"": 20, ""n_estimators"": 500}",0.14394892638468157,2138,66
+3,rf,"{""max_depth"": 3, ""min_samples_leaf"": 50, ""n_estimators"": 500}",0.14337425874924536,2138,66
+3,rf,"{""max_depth"": 5, ""min_samples_leaf"": 20, ""n_estimators"": 500}",0.14590523281624357,2138,66
+3,rf,"{""max_depth"": 5, ""min_samples_leaf"": 50, ""n_estimators"": 500}",0.13646476371468658,2138,66
+3,xgboost,"{""learning_rate"": 0.05, ""max_depth"": 2, ""min_leaf"": 20, ""n_estimators"": 200}",0.12868703729216294,2138,66
+3,xgboost,"{""learning_rate"": 0.05, ""max_depth"": 2, ""min_leaf"": 20, ""n_estimators"": 400}",0.1323016390727982,2138,66
+3,xgboost,"{""learning_rate"": 0.05, ""max_depth"": 3, ""min_leaf"": 20, ""n_estimators"": 200}",0.1209980241075008,2138,66
+3,xgboost,"{""learning_rate"": 0.05, ""max_depth"": 3, ""min_leaf"": 20, ""n_estimators"": 400}",0.1307146978990496,2138,66

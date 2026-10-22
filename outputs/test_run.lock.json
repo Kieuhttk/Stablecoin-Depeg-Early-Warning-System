@@ -1,0 +1,6 @@
+{
+  "test_run_utc": "2026-10-22T09:11:05+00:00",
+  "freeze_sha256": "00db129ced413b395aa4eab6d5b0e28295c5b0cd49ad63dd2240fcc3dfa27587",
+  "has_xgboost": true,
+  "has_shap": true
+}

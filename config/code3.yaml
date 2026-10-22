@@ -1,0 +1,85 @@
+# Code 3 - cấu hình mô hình ML, đánh giá và giải thích.
+# Mọi tham số (split, ngưỡng, seed, lưới tham số) đặt ở đây, không hard-code trong mã nguồn.
+
+features_path: "data/processed/features.parquet"   # hợp đồng Code 2 -> Code 3
+labels_config: "config/labels.yaml"                # danh sách 27 predictor, split của Code 2
+output_dir: "outputs"
+
+# Cấu hình nhãn chính (khớp Nhật ký quyết định: hl, 1%, m = 1).
+spec:
+  source: hl
+  tau: 0.01
+  m: 1
+
+horizons: [1, 3]        # h = 1 ngày là chính (dashboard 24h), h = 3 ngày bổ sung
+primary_horizon: 1
+lead_lookback: 7
+seed: 20261022
+
+# Loại biến khỏi mô hình (chỉ trong Code 3; labels.yaml của Code 2 giữ nguyên 27 biến).
+# Để [] cho cấu hình chính. Dùng thử [xmkt_gap, xmkt_gap_missing] kèm output_dir riêng để so sánh.
+exclude_features: []
+
+# Walk-forward mở rộng (expanding window) trên train + validation.
+# Mỗi khối là một fold kiểm tra; mô hình của fold chỉ huấn luyện trên dữ liệu trước khối
+# (cách khối h + m ngày để nhãn không chồng sang khối kiểm tra).
+cv_block_starts: ["2021-01-01", "2021-07-01", "2022-01-01", "2022-07-01"]
+cv_end: "2023-01-01"
+
+f_beta: 2               # ngưỡng cảnh báo chọn bằng cách tối đa hóa F2 trên OOF
+
+# Ngân sách báo động (tỉ lệ ngày bị báo động) để so sánh công bằng các mô hình và baseline (T05b).
+alarm_budgets: [0.03, 0.05, 0.10]
+
+models: [baseline, logit, rf, gboost]
+# Tiêu chí chọn (ghi vào Nhật ký quyết định, đặt trước khi chạy test): mô hình ML có PR-AUC
+# walk-forward cao nhất ở primary_horizon là mô hình chính + dashboard. Baseline và logit là benchmark.
+dashboard_model: rf     # dev 22/10: RF 0.102 > XGBoost 0.088 (h=1); code cảnh báo nếu lệch tiêu chí
+robustness_models: [baseline, logit, rf, gboost]   # baseline để so sánh PR-AUC cùng kịch bản
+
+# Lưới tham số nhỏ (ít sự kiện nên tránh lưới lớn để không overfit lựa chọn).
+grid:
+  logit:
+    - {C: 0.05}
+    - {C: 0.5}
+  rf:
+    - {max_depth: 3, min_samples_leaf: 20, n_estimators: 500}
+    - {max_depth: 3, min_samples_leaf: 50, n_estimators: 500}
+    - {max_depth: 5, min_samples_leaf: 20, n_estimators: 500}
+    - {max_depth: 5, min_samples_leaf: 50, n_estimators: 500}
+  gboost:    # XGBoost nếu có cài; nếu không dùng HistGradientBoosting của scikit-learn
+    - {max_depth: 2, n_estimators: 200, learning_rate: 0.05, min_leaf: 20}
+    - {max_depth: 2, n_estimators: 400, learning_rate: 0.05, min_leaf: 20}
+    - {max_depth: 3, n_estimators: 200, learning_rate: 0.05, min_leaf: 20}
+    - {max_depth: 3, n_estimators: 400, learning_rate: 0.05, min_leaf: 20}
+
+# Nhóm feature dùng cho T06 và phân tích loại bỏ nhóm (RQ2). Hợp của các nhóm phải
+# trùng đúng 27 predictor trong labels.yaml.
+feature_groups:
+  price_deviation: [peg_deviation, peg_deviation_change_1d, price_return_1d, price_change_1d,
+                    price_return_mean_7d, price_return_mean_30d]
+  volatility: [range_hl, price_return_vol_7d, price_return_vol_30d]
+  liquidity: [volume, turnover, volume_pct_change_1d, turnover_pct_change_1d, xmkt_gap, xmkt_gap_missing]
+  supply_tvl: [supply_change, supply_eth_change, supply_eth_share, supply_change_change_1d,
+               supply_eth_change_change_1d, tvl_change, tvl_change_change_1d]
+  crypto_market: [btc_ret, btc_vol, eth_ret, eth_vol, usdt_usd]
+
+# Bỏ riêng từng nhóm biến nghi vấn (P2). xmkt_gap gần như chỉ có giá trị ở USDC trong 2021-2022
+# nên có thể là biến thay cho mã coin; dev xếp nó hạng 2-3 theo SHAP.
+robustness_drop_features:
+  drop_xmkt_gap: [xmkt_gap, xmkt_gap_missing]
+
+# Loại stablecoin cho P1 (RQ3). Lưu ý: DAI là coin crypto-backed duy nhất nên loại coin và
+# từng coin bị trộn lẫn; ghi vào Limitations.
+coin_types:
+  USDT: fiat_backed
+  USDC: fiat_backed
+  DAI: crypto_collateralized
+
+# Biến thể độ nhạy cho P2 (nhãn đã có sẵn trong features.parquet).
+robustness_specs:
+  - {source: hl, tau: 0.005, m: 1}
+  - {source: hl, tau: 0.02, m: 1}
+  - {source: hl, tau: 0.01, m: 2}
+  - {source: cl, tau: 0.01, m: 1}
+  - {source: y, tau: 0.01, m: 1}
