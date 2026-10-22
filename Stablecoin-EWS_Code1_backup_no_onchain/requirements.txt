@@ -5,3 +5,5 @@ requests
 yfinance
 pyyaml
 pytest
+xgboost
+shap
