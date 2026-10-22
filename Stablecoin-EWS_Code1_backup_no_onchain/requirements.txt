@@ -1,9 +1,0 @@
-pandas>=2.0
-numpy
-pyarrow
-requests
-yfinance
-pyyaml
-pytest
-xgboost
-shap
