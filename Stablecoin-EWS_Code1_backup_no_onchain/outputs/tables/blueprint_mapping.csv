@@ -1,0 +1,16 @@
+﻿truong_trong_de,cot_trong_panel,trang_thai,ghi_chu
+timestamp,timestamp,Có,
+stablecoin,stablecoin,Có,
+price,price (+ open/high/low),Có,"Daily, UTC 00:00"
+peg_deviation,"peg_deviation, peg_deviation_min, peg_deviation_hl_clean",Có,Thêm bản đồng thuận nhiều nguồn và bản trong ngày đã làm sạch
+volume,volume,Có,
+liquidity,"turnover, range_hl, xmkt_gap",Proxy,Không có bid-ask spread/order book lịch sử miễn phí
+supply,supply,Có,"DefiLlama, trễ 1 ngày"
+supply_change,"supply_change, supply_eth_change",Có/Proxy,Proxy mint/burn ròng
+dex_imbalance,"(không có) -> xmkt_gap, supply_eth_share",KHÔNG,Không tải được dữ liệu on-chain/DEX; dùng chênh lệch giá liên thị trường làm proxy
+"mint/burn, exchange flows","(không có) -> supply_change, supply_eth_change",KHÔNG,Không có on-chain; dùng thay đổi supply DefiLlama
+btc_vol,btc_vol (+ btc_ret),Có,
+eth_vol,eth_vol (+ eth_ret),Có,
+collateral price shocks,"eth_ret, eth_vol",Proxy,ETH đại diện tài sản thế chấp của DAI
+tvl_change,tvl_change (+ tvl),Có,"DefiLlama, trễ 1 ngày"
+depeg_label_h1/h6/h24,(Code 2 tạo),Không thuộc Code 1,"Panel daily: h tính theo ngày (h = 1, 3) bằng shift(-h) trong từng coin"
