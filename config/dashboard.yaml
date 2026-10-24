@@ -47,12 +47,18 @@ figures:
 
 # Giao diện sáng xanh navy - teal. Tách khỏi `figures.palette` để F03/F04 giữ màu riêng.
 theme:
-  coin: {USDT: "#0F9D8A", USDC: "#3478D4", DAI: "#D99124"}
-  level_bg: {Green: "#DCF5E5", Amber: "#FFF1CC", Red: "#FDE2E2"}
-  level_fg: {Green: "#17663B", Amber: "#8A5700", Red: "#A12E32"}
-  level_line: {Green: "#35A66F", Amber: "#E5A323", Red: "#DB4B50"}
-  ink: "#19324D"
-  muted: "#64778B"
-  card_border: "#DCE5ED"
-  chip_bg: "#E7F4F1"
-  chip_fg: "#0D7569"
+  coin: {USDT: "#0EA5A4", USDC: "#2F6BFF", DAI: "#8B5CF6"}
+  hero_bg: "#0B2A5B"
+  hero_sub: "#A9C1F5"
+  brand: "#2F6BFF"
+  brand_dark: "#1F4FD0"
+  level_band: {Green: "#1FA971", Amber: "#F5A623", Red: "#E5484D"}
+  level_on: {Green: "#FFFFFF", Amber: "#3D2600", Red: "#FFFFFF"}
+  level_bg: {Green: "#E3F6EC", Amber: "#FFF3D6", Red: "#FDE4E4"}
+  level_fg: {Green: "#0F6B45", Amber: "#7A4B00", Red: "#A3262A"}
+  level_line: {Green: "#1FA971", Amber: "#F5A623", Red: "#E5484D"}
+  ink: "#0F1E3D"
+  muted: "#5B6B8C"
+  card_border: "#D9E1F2"
+  chip_bg: "#E4EAFF"
+  chip_fg: "#1E40AF"

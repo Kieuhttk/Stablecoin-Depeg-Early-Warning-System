@@ -1,7 +1,9 @@
 __pycache__/
 .pytest_cache/
+.venv/
 *.pyc
 .env
 data/interim/
 outputs_nox/
+Stablecoin-EWS_Code1_backup_no_onchain/
 evaluate_check.py

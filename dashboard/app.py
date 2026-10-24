@@ -27,30 +27,33 @@ st.markdown(f"""
 #MainMenu, footer {{visibility: hidden;}}
 .block-container {{padding-top: 1.35rem; padding-bottom: 2.5rem; max-width: 1320px;}}
 html, body, [class*="css"] {{color: {TH['ink']};}}
-.hero {{background: linear-gradient(115deg, #EAF4FF 0%, #F2F8FC 53%, #EAF7F3 100%);
-        border: 1px solid {TH['card_border']}; border-radius: 18px; padding: 20px 24px; margin-bottom: 12px;
-        box-shadow: 0 5px 18px rgba(25,50,77,.05);}}
-.hero h1 {{margin: 0; font-size: 1.8rem; font-weight: 750; letter-spacing: -0.35px;}}
+.hero {{background: {TH['hero_bg']}; border-radius: 18px; padding: 22px 26px; margin-bottom: 14px;
+        box-shadow: 0 10px 28px rgba(11,42,91,.22); border-bottom: 5px solid {TH['brand']};}}
+.hero h1 {{margin: 0; font-size: 1.9rem; font-weight: 750; letter-spacing: -0.35px; color:#fff;}}
 .hero h1 a {{color:inherit; text-decoration:none;}}
 .hero h1 a:hover {{text-decoration:underline; text-underline-offset:4px;}}
-.hero p {{margin: 5px 0 12px 0; color: {TH['muted']}; font-size: 0.9rem;}}
-.pill {{display:inline-block; background:#fff; border:1px solid {TH['card_border']}; border-radius:999px;
-        padding:3px 12px; margin-right:8px; font-size:0.8rem; color:{TH['ink']};}}
+.hero p {{margin: 5px 0 12px 0; color: {TH['hero_sub']}; font-size: 0.9rem;}}
+.pill {{display:inline-block; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.30); border-radius:999px;
+        padding:3px 12px; margin-right:8px; font-size:0.8rem; color:#fff;}}
 .card {{background:#fff; border:1px solid {TH['card_border']}; border-radius:18px; padding:18px 20px;
-        box-shadow: 0 6px 20px rgba(25,50,77,.055); height:100%;}}
-.card-top {{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}}
+        box-shadow: 0 8px 24px rgba(11,42,91,.10); height:100%; overflow:hidden;}}
+.card-top {{display:flex; justify-content:space-between; align-items:center; margin:-18px -20px 14px; padding:12px 20px;}}
+.lv-Green .card-top {{background:{TH['level_band']['Green']}; color:{TH['level_on']['Green']};}}
+.lv-Amber .card-top {{background:{TH['level_band']['Amber']}; color:{TH['level_on']['Amber']};}}
+.lv-Red .card-top {{background:{TH['level_band']['Red']}; color:{TH['level_on']['Red']};}}
+.card-top .badge {{background:rgba(255,255,255,.30) !important; color:inherit !important;}}
 .coin {{font-size:1.3rem; font-weight:750; display:flex; align-items:center; gap:8px;}}
-.coin-dot {{width:12px; height:12px; border-radius:50%; display:inline-block;}}
+.coin-dot {{width:14px; height:14px; border-radius:50%; display:inline-block; border:2px solid rgba(255,255,255,.9);}}
 .badge {{border-radius:999px; padding:4px 12px; font-size:0.78rem; font-weight:700; white-space:nowrap;}}
 .score-row {{display:flex; align-items:baseline; gap:8px;}}
-.score {{font-size:2.6rem; font-weight:800; line-height:1;}}
+.score {{font-size:3.2rem; font-weight:800; line-height:1;}}
 .score-unit {{color:{TH['muted']}; font-size:0.85rem;}}
 .gauge {{position:relative; height:10px; border-radius:999px; margin:10px 0 16px 0;
-         background: linear-gradient(90deg, #BFE8D1 0%, #F7E4A9 60%, #F2B9B9 100%);}}
+         background: linear-gradient(90deg, #7ADBAE 0%, #FFD27A 60%, #FF9494 100%);}}
 .gauge-dot {{position:absolute; top:-4px; width:18px; height:18px; border-radius:50%; background:#fff;
              border:3px solid {TH['ink']}; transform:translateX(-50%); box-shadow:0 2px 6px rgba(0,0,0,.15);}}
 .grid {{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;}}
-.stat {{background:#F5F8FA; border:1px solid #EDF2F5; border-radius:12px; padding:9px 12px;}}
+.stat {{background:#F2F5FC; border:1px solid #E0E7F7; border-radius:12px; padding:9px 12px;}}
 .stat .lbl {{color:{TH['muted']}; font-size:0.72rem; text-transform:uppercase; letter-spacing:.4px;}}
 .stat .val {{font-size:1.05rem; font-weight:700; margin-top:2px;}}
 .drv-title {{color:{TH['muted']}; font-size:0.72rem; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px;}}
@@ -58,14 +61,14 @@ html, body, [class*="css"] {{color: {TH['ink']};}}
         padding:3px 10px; margin:0 6px 6px 0; font-size:0.82rem; font-weight:600;}}
 .note {{border-radius:9px; padding:7px 10px; margin:4px 0 8px; font-size:0.8rem; line-height:1.45;}}
 .note-demo {{background:#FFE3E3; color:#8E2C2C; border:1px solid #F6C4C4;}}
-.note-info {{background:#EAF4FF; color:#28557C; border:1px solid #D2E5F5;}}
+.note-info {{background:#E6EEFF; color:#1E3A8A; border:1px solid #C9D8FF;}}
 .note-warn {{background:#FFF5DB; color:#79520A; border:1px solid #F1DFAE;}}
-.section {{font-size:1.15rem; font-weight:750; margin: 22px 0 8px 0;}}
+.section {{font-size:1.2rem; font-weight:750; margin: 24px 0 10px 0; color:{TH['hero_bg']}; border-left:5px solid {TH['brand']}; padding-left:10px;}}
 .stTabs [data-baseweb="tab"] {{border-radius:10px 10px 0 0; padding:8px 16px;}}
-.stTabs [aria-selected="true"] {{color:#0F756D; border-bottom-color:#0F9D8A;}}
-button[kind="primary"] {{background:#0F8F83; border-color:#0F8F83;}}
-button[kind="primary"]:hover {{background:#0B756C; border-color:#0B756C;}}
-div[data-testid="stMetric"] {{background:#fff; border:1px solid {TH['card_border']}; border-radius:14px; padding:12px 14px;}}
+.stTabs [aria-selected="true"] {{color:{TH['brand_dark']}; border-bottom-color:{TH['brand']};}}
+button[kind="primary"] {{background:{TH['brand']}; border-color:{TH['brand']};}}
+button[kind="primary"]:hover {{background:{TH['brand_dark']}; border-color:{TH['brand_dark']};}}
+div[data-testid="stMetric"] {{background:#fff; border:1px solid {TH['card_border']}; border-left:5px solid {TH['brand']}; border-radius:14px; padding:12px 14px;}}
 @media (max-width: 800px) {{.hero {{padding:16px;}} .hero h1 {{font-size:1.5rem;}} .pill {{margin:3px 4px 3px 0;}}}}
 </style>
 """, unsafe_allow_html=True)
@@ -101,7 +104,7 @@ def style_fig(fig: go.Figure, ytitle: str, height: int = 360) -> go.Figure:
         legend=dict(orientation="h", y=1.1, x=0),
     )
     fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(gridcolor="#EDF0F8")
+    fig.update_yaxes(gridcolor="#E3E9F7")
     return fig
 
 
@@ -127,7 +130,7 @@ def coin_card(cn: str, r, h: int) -> str:
     )
     drivers_html = f"<div class='drv-title'>Tín hiệu rủi ro chính</div>{drv_html}" if drv else ""
     return f"""
-<div class='card'>
+<div class='card lv-{lv}'>
   <div class='card-top'>
     <div class='coin'><span class='coin-dot' style='background:{TH['coin'][cn]}'></span>{cn}</div>
     <span class='badge' style='background:{TH['level_bg'][lv]};color:{TH['level_fg'][lv]}'>
@@ -242,7 +245,7 @@ with t1:
     else:
         fig = go.Figure()
         fig.add_scatter(x=p["timestamp"], y=p["dev"] * 100, mode="lines", name="|P−1| (%)",
-                        line=dict(color=ccol, width=2.4), fill="tozeroy", fillcolor="rgba(150,170,230,0.15)")
+                        line=dict(color=ccol, width=2.4), fill="tozeroy", fillcolor="rgba(47,107,255,0.12)")
         tau = cfg["depeg"]["tau_main"] * 100
         fig.add_hline(y=tau, line_dash="dash", line_color=TH["level_line"]["Red"], annotation_text=f"ngưỡng depeg {tau:g}%")
         st.plotly_chart(style_fig(fig, "Độ lệch neo (%)"), width="stretch")
