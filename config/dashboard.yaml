@@ -1,0 +1,58 @@
+# Cấu hình cho phần Code 4: dashboard + event-study (F03) + F04.
+# Mọi tham số đặt ở đây, không hard-code trong code.
+
+paths:
+  panel: Stablecoin-EWS_Code1_backup_no_onchain/data/processed/panel.parquet  # Code 1 (commit origin/main mới)
+  predictions: outputs/predictions.parquet     # Code 3
+  figures: outputs/figures
+
+coins: [USDT, USDC, DAI]
+
+model:
+  horizon_days: 1          # h = 1 ngày <-> "xác suất depeg 24h"
+  final_model: null        # tên model chốt (cột `model`); null = tự chọn model có dòng final
+
+depeg:                     # khớp Nhật ký quyết định (Mục 2)
+  tau_main: 0.01           # ngưỡng chính 1% (đổi sang 0.005 nếu Code 2 chuyển ngưỡng chính)
+  tau_fallback: 0.005
+  m_main: 1
+
+alert:
+  amber_quantile: 0.90     # Amber: score_raw nằm trong top 10% cao nhất của giai đoạn dev (proba_type = oof)
+  liquidity_low_pct: 0.10  # thanh khoản "suy giảm" nếu nằm dưới phân vị này trong 90 ngày gần nhất
+  liquidity_mid_pct: 0.25
+  liquidity_higher_is_better: true   # XÁC NHẬN với Code 1 (cách tính proxy liquidity)
+
+event_study:
+  test_start: "2023-01-01"
+  window_before: 10        # ngày trước onset (tau < 0)
+  window_after: 10
+  baseline_start: -40      # nền để chuẩn hóa thanh khoản: trung vị các ngày [-40, -11]
+  baseline_end: -11
+  n_events: 4
+  min_separation_days: 30  # cùng một coin
+  include_dev_events: false   # true: cho phép chọn sự kiện 2022 (xác suất oof) làm case study
+  manual_events: []           # ví dụ: [{coin: USDC, date: "2023-03-11"}] -> ghi đè chọn tự động
+
+figures:
+  dpi: 300
+  palette:                 # NÊN thống nhất với Code 2 (F01, F05) và Code 3 (F02)
+    USDT: "#26A17B"
+    USDC: "#2775CA"
+    DAI: "#F5AC37"
+    Green: "#2E9E5B"
+    Amber: "#F2A900"
+    Red: "#D64545"
+    neutral: "#6B7280"
+
+# Giao diện sáng xanh navy - teal. Tách khỏi `figures.palette` để F03/F04 giữ màu riêng.
+theme:
+  coin: {USDT: "#0F9D8A", USDC: "#3478D4", DAI: "#D99124"}
+  level_bg: {Green: "#DCF5E5", Amber: "#FFF1CC", Red: "#FDE2E2"}
+  level_fg: {Green: "#17663B", Amber: "#8A5700", Red: "#A12E32"}
+  level_line: {Green: "#35A66F", Amber: "#E5A323", Red: "#DB4B50"}
+  ink: "#19324D"
+  muted: "#64778B"
+  card_border: "#DCE5ED"
+  chip_bg: "#E7F4F1"
+  chip_fg: "#0D7569"
