@@ -13,9 +13,7 @@
 5. [Cấu trúc thư mục dự án](#5-cấu-trúc-thư-mục-dự-án)
 6. [Xử lý sự cố thường gặp](#6-xử-lý-sự-cố-thường-gặp)
 7. [Trạng thái, kết quả và hạn chế đã biết](#7-trạng-thái-kết-quả-và-hạn-chế-đã-biết)
-8. [Quy ước làm việc nhóm](#8-quy-ước-làm-việc-nhóm)
-9. [Nhóm thực hiện](#9-nhóm-thực-hiện)
-10. [Tài liệu tham khảo](#10-tài-liệu-tham-khảo)
+8. [Nhóm thực hiện](#8-nhóm-thực-hiện)
 
 ---
 
@@ -275,17 +273,17 @@ project/
 - Chưa khóa phiên bản môi trường; xem mục 3.
 
 ---
-
+Trần Nguyễn Quốc Lợi
 ## 8. Nhóm thực hiện
 
 | Vai trò | Họ tên | Phụ trách |
 |---|---|---|
-| Code 1 | *[Trần Nguyễn Quốc Lợi]* | Dữ liệu, tái lập pipeline |
-| Code 2 | *[Nguyễn Lê Phương Nga]* | Nhãn, đặc trưng, Logit, co-depeg |
-| Code 3 | *[Huỳnh Thị Thúy Kiều]* | Mô hình ML, đánh giá, SHAP |
-| Code 4 | *[Lê Thị Minh Thứ]* | Event-study, dashboard |
-| Viết 1 | *[Huỳnh Thị Minh Hạnh]* | Khung lý thuyết, biên tập báo cáo |
-| Viết 2 | *[Nguyễn Hồ Hải Hòa]* | Kết quả và diễn giải |
+| Code 1 | *Trần Nguyễn Quốc Lợi* | Dữ liệu, tái lập pipeline |
+| Code 2 | *Nguyễn Lê Phương Nga* | Nhãn, đặc trưng, Logit, co-depeg |
+| Code 3 | *Huỳnh Thị Thúy Kiều* | Mô hình ML, đánh giá, SHAP |
+| Code 4 | *Lê Thị Minh Thứ* | Event-study, dashboard |
+| Viết 1 | *Huỳnh Thị Minh Hạnh* | Khung lý thuyết, biên tập báo cáo |
+| Viết 2 | *Nguyễn Hồ Hải Hòa* | Kết quả và diễn giải |
 
 ---
 
