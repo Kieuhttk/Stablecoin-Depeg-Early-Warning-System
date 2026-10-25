@@ -3,6 +3,7 @@
 Chạy từ thư mục gốc repo:  streamlit run dashboard/app.py
 """
 import html
+import json
 import pathlib
 import sys
 
@@ -21,6 +22,8 @@ cfg = mc.load_config()
 TH = cfg["theme"]
 ALERT_VN = {"Green": "Bình thường", "Amber": "Cảnh báo sớm", "Red": "Cảnh báo nguy hiểm"}
 ALERT_DOT = {"Green": "●", "Amber": "●", "Red": "●"}
+# Biến nghi là biến thay cho mã coin (xmkt_gap gần như chỉ có giá trị ở USDC 2021-2022).
+PROXY_DRIVERS = {"xmkt_gap", "xmkt_gap_missing"}
 
 st.markdown(f"""
 <style>
@@ -112,7 +115,11 @@ def coin_card(cn: str, r, h: int) -> str:
     lv = r["alert"]
     fmt = lambda v, f: (f.format(v) if v is not None and pd.notna(v) else "—")
     drv = [d for d in mc.drivers_of(r) if d != mc.EMPTY_DRIVER_MSG]
-    drv_html = "".join(f"<span class='chip'>{html.escape(str(d))}</span>" for d in drv)
+    drv_html = "".join(
+        f"<span class='chip' title='Biến này có thể là biến thay cho mã coin; xem phần Giới hạn.'>"
+        f"{html.escape(str(d))}{' ⚠' if str(d) in PROXY_DRIVERS else ''}</span>"
+        for d in drv
+    )
     score = float(r["risk_score"]) if pd.notna(r.get("risk_score")) else 0.0
     proba = float(r["proba"]) * 100 if pd.notna(r.get("proba")) else None
     liquidity_value = r.get("liquidity")
@@ -128,7 +135,9 @@ def coin_card(cn: str, r, h: int) -> str:
         f"<div class='stat'><div class='lbl'>{label}</div><div class='val'>{value}</div></div>"
         for label, value in stats
     )
-    drivers_html = f"<div class='drv-title'>Tín hiệu rủi ro chính</div>{drv_html}" if drv else ""
+    proxy_hint = ("<div class='note note-warn'>⚠ Driver có thể phản ánh đặc thù từng coin hơn là tín hiệu depeg "
+                  "(xem Giới hạn).</div>") if any(str(d) in PROXY_DRIVERS for d in drv) else ""
+    drivers_html = f"<div class='drv-title'>Tín hiệu rủi ro chính</div>{drv_html}{proxy_hint}" if drv else ""
     return f"""
 <div class='card lv-{lv}'>
   <div class='card-top'>
@@ -153,7 +162,18 @@ panel, pred, flags = load_all()
 
 combos = pred.groupby(["model", "h"]).size().reset_index()[["model", "h"]]
 models = sorted(combos["model"].unique())
-default_model = cfg["model"]["final_model"] if cfg["model"]["final_model"] in models else None
+def frozen_model_name():
+    """Mô hình đã đóng băng ở Code 3 (outputs/dev/model_freeze.json) là mặc định của dashboard."""
+    try:
+        fz = json.loads((ROOT / "outputs" / "dev" / "model_freeze.json").read_text(encoding="utf-8"))
+        return fz.get("dashboard_model")
+    except Exception:
+        return None
+
+
+_frozen = frozen_model_name()
+default_model = _frozen if _frozen in models else None
+default_model = default_model or (cfg["model"]["final_model"] if cfg["model"]["final_model"] in models else None)
 default_model = default_model or mc.select_run(pred, None, cfg["model"]["horizon_days"])["model"].iloc[0]
 model = st.sidebar.selectbox("Mô hình", models, index=models.index(default_model))
 hs = sorted(combos.loc[combos["model"] == model, "h"].astype(int).unique())
@@ -190,7 +210,14 @@ try:
         with live_col:
             if live_coin in live_by_coin.index:
                 live_row = live_by_coin.loc[live_coin]
-                st.metric(f"{live_coin} · giá USD", f"${live_row['price']:.6f}", f"{live_row['dev'] * 100:.3f}% lệch khỏi $1")
+                live_price = pd.to_numeric(live_row["price"], errors="coerce")
+                # Giá ngoài khoảng hợp lý (0, NaN, cặp không thanh khoản) là thiếu dữ liệu, không phải depeg.
+                if pd.isna(live_price) or not (0.5 < live_price < 1.5):
+                    st.metric(f"{live_coin} · giá USD", "Không có giá trực tiếp")
+                    st.caption("Nguồn không trả giá hợp lệ cho coin này.")
+                else:
+                    st.metric(f"{live_coin} · giá USD", f"${live_price:.6f}")
+                    st.caption(f"Lệch {abs(live_price - 1) * 100:.3f}% so với $1")
             else:
                 st.metric(f"{live_coin} · giá USD", "Không có dữ liệu")
     st.caption("Giá spot là dữ liệu của một sàn và có thể lệch so với giá USD tổng hợp; chỉ dùng để xem trạng thái thị trường, không đưa vào dự báo rủi ro đã huấn luyện.")
@@ -302,15 +329,16 @@ with t3:
 with t4:
     st.markdown(f"""
 **Cách đọc các chỉ báo**
-- **Red**: mô hình phát cảnh báo (`alarm`), ngưỡng chọn trên validation bằng cách tối đa hóa F₂.
+- **Red**: mô hình phát cảnh báo (`alarm`), ngưỡng chọn bằng cách tối đa hóa F₂ trên dự báo OOF walk-forward của giai đoạn dev (train + validation).
 - **Amber**: `score_raw` thuộc top {int((1 - cfg['alert']['amber_quantile']) * 100)}% cao nhất của giai đoạn dev (xếp hạng gộp 3 coin); Red được ưu tiên hơn Amber.
 - **Green**: các trường hợp còn lại.
-- **Điểm rủi ro 0–100**: phân vị của `score_raw` so với phân phối giai đoạn dev, nên không phụ thuộc cách hiệu chuẩn xác suất.
+- **Điểm rủi ro 0–100**: phân vị (xếp hạng) của `score_raw` so với phân phối giai đoạn dev, nên không phụ thuộc cách hiệu chuẩn xác suất. Đây là thứ hạng tương đối, **không phải xác suất**: điểm cao có thể đi cùng xác suất tuyệt đối thấp vì depeg rất hiếm (xem cột Xác suất).
 - **Xác suất depeg**: xác suất đã hiệu chuẩn Platt; dòng `oof` (dev) và `final` (test) hiệu chuẩn riêng nên không phải xác suất tuyệt đối.
 - **Driver**: top 3 biến có đóng góp SHAP dương cao nhất; để trống nếu không biến nào đóng góp dương.
 
 **Giới hạn**
 - Dữ liệu daily; giá đóng cửa có thể bỏ sót depeg trong ngày.
+- Driver `xmkt_gap` / `xmkt_gap_missing` (dấu ⚠) gần như chỉ có giá trị ở USDC giai đoạn 2021–2022, nên có thể đóng vai biến thay cho mã coin; kết quả độ nhạy khi bỏ hai biến này (bảng P2, drop_xmkt_gap) không đồng nhất giữa các mô hình nên chưa kết luận được mức phụ thuộc.
 - Sự kiện depeg hiếm nên xác suất cảnh báo có độ bất định lớn; mô hình chỉ có 3 coin lõi.
 - Mô hình: `{model}`, horizon h = {h} ngày. Đánh giá chính thức nằm ở các Bảng T04–T05 của bài.
 """)
