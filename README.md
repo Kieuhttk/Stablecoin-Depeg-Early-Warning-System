@@ -273,7 +273,6 @@ project/
 - Chưa khóa phiên bản môi trường; xem mục 3.
 
 ---
-Trần Nguyễn Quốc Lợi
 ## 8. Nhóm thực hiện
 
 | Vai trò | Họ tên | Phụ trách |
