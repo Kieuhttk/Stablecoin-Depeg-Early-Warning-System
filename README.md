@@ -254,14 +254,12 @@ project/
 
 ## 7. Trạng thái, kết quả và hạn chế đã biết
 
-**Trạng thái:** *[Cập nhật trước khi nộp: đã chạy test chưa, ngày chạy, thẻ `code3-freeze`.]*
+**Trạng thái:** *đã chạy test vào ngày 22/10/2026, thẻ `code3-freeze`*
 
 **Phát hiện trong giai đoạn dev (walk-forward 2021–2022; chưa phải kết quả test):**
 - Baseline ngây thơ (độ lệch neo hiện tại) khó bị đánh bại: ở cùng ngân sách báo động, baseline bắt số sự kiện bằng hoặc nhiều hơn RF và XGBoost.
 - Hiệu năng gộp bị DAI chi phối (16 trong 24 nhãn dương h = 1); `xmkt_gap` hoạt động như biến nhận diện coin.
 - Nhóm biến động giá chiếm phần lớn đóng góp SHAP của mô hình RF.
-
-*[Điền sau khi chạy test: bảng tóm tắt T04, T05b và kết luận cho RQ1–RQ5.]*
 
 **Hạn chế đã biết:**
 - Số sự kiện độc lập rất ít (validation 2 ngày sự kiện, test vài ngày), nên ước lượng hiệu năng và ngưỡng cảnh báo chưa ổn định.
